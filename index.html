@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analisis Laporan Keuangan</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="main-header">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-chart-line"></i>
+                    <h1>FinanceAnalytics</h1>
+                </div>
+                <div class="user-info">
+                    <span>Halo, <strong>Khaerul Ananda</strong></span>
+                    <div class="status-indicator online"></div>
+                </div>
+            </div>
+        </header>
+
+        <!-- Navigation -->
+        <nav class="nav-tabs">
+            <button class="tab-button active" onclick="openTab('dashboard-tab')">
+                <i class="fas fa-home"></i> Dashboard
+            </button>
+            <button class="tab-button" onclick="openTab('input-tab')">
+                <i class="fas fa-plus-circle"></i> Analisis Baru
+            </button>
+            <button class="tab-button" onclick="openTab('history-tab')">
+                <i class="fas fa-history"></i> Riwayat
+            </button>
+            <button class="tab-button" onclick="openTab('report-tab')">
+                <i class="fas fa-chart-bar"></i> Laporan
+            </button>
+        </nav>
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard-tab" class="tab-content active">
+            <div class="dashboard-section">
+                <!-- Welcome Banner -->
+                <div class="welcome-banner">
+                    <div class="welcome-content">
+                        <h2>Selamat Datang di FinanceAnalytics! 🎉</h2>
+                        <p>Analisis keuangan perusahaan Anda dengan mudah dan akurat</p>
+                    </div>
+                    <div class="welcome-stats">
+                        <div class="stat-badge">
+                            <i class="fas fa-database"></i>
+                            <span id="totalDataPoints">0 Data Points</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Cards -->
+                <div class="kpi-section">
+                    <h3 class="section-title">Key Performance Indicators</h3>
+                    <div class="kpi-grid">
+                        <div class="kpi-card revenue">
+                            <div class="kpi-icon">
+                                <i class="fas fa-money-bill-wave"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <h4>Total Pendapatan</h4>
+                                <p id="totalRevenue">Rp 0</p>
+                                <span class="kpi-trend positive">
+                                    <i class="fas fa-arrow-up"></i> 0%
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card profit">
+                            <div class="kpi-icon">
+                                <i class="fas fa-chart-line"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <h4>Rata-rata Laba Bersih</h4>
+                                <p id="avgNetProfit">Rp 0</p>
+                                <span class="kpi-trend positive">
+                                    <i class="fas fa-arrow-up"></i> 0%
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card margin">
+                            <div class="kpi-icon">
+                                <i class="fas fa-percentage"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <h4>Margin Terbaik</h4>
+                                <p id="bestMargin">0%</p>
+                                <span class="kpi-company" id="bestMarginCompany">-</span>
+                            </div>
+                        </div>
+
+                        <div class="kpi-card health">
+                            <div class="kpi-icon">
+                                <i class="fas fa-heartbeat"></i>
+                            </div>
+                            <div class="kpi-content">
+                                <h4>Kesehatan Rata-rata</h4>
+                                <p id="avgHealthScore">0/10</p>
+                                <span class="health-bar">
+                                    <span class="health-fill" id="healthFill"></span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Section -->
+                <div class="charts-section">
+                    <div class="chart-row">
+                        <div class="chart-container large">
+                            <div class="chart-header">
+                                <h4>Trend Kinerja Keuangan</h4>
+                                <select id="trendPeriod" onchange="updateTrendChart()">
+                                    <option value="3">3 Bulan</option>
+                                    <option value="6">6 Bulan</option>
+                                    <option value="12">1 Tahun</option>
+                                </select>
+                            </div>
+                            <canvas id="performanceTrendChart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="chart-row">
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h4>Distribusi Margin</h4>
+                            </div>
+                            <canvas id="marginDistributionChart"></canvas>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <div class="chart-header">
+                                <h4>Kategori Kesehatan</h4>
+                            </div>
+                            <canvas id="healthCategoryChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activity & Alerts -->
+                <div class="activity-section">
+                    <div class="activity-column">
+                        <div class="activity-card">
+                            <div class="card-header">
+                                <h4><i class="fas fa-clock"></i> Aktivitas Terbaru</h4>
+                            </div>
+                            <div id="recentActivityList" class="activity-list">
+                                <!-- Aktivitas akan dimuat di sini -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="activity-column">
+                        <div class="activity-card">
+                            <div class="card-header">
+                                <h4><i class="fas fa-bell"></i> Notifikasi & Alert</h4>
+                            </div>
+                            <div id="alertList" class="alert-list">
+                                <!-- Alert akan dimuat di sini -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="quick-stats">
+                    <h3 class="section-title">Statistik Cepat</h3>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <i class="fas fa-building"></i>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalCompanies">0</span>
+                                <span class="stat-label">Perusahaan</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-file-invoice"></i>
+                            <div class="stat-info">
+                                <span class="stat-value" id="totalAnalysis">0</span>
+                                <span class="stat-label">Analisis</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-calendar"></i>
+                            <div class="stat-info">
+                                <span class="stat-value" id="activePeriods">0</span>
+                                <span class="stat-label">Periode</span>
+                            </div>
+                        </div>
+                        <div class="stat-item">
+                            <i class="fas fa-chart-pie"></i>
+                            <div class="stat-info">
+                                <span class="stat-value" id="avgRoa">0%</span>
+                                <span class="stat-label">ROA Rata-rata</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Input Tab -->
+        <div id="input-tab" class="tab-content">
+            <!-- [Kode input tab sebelumnya] -->
+        </div>
+
+        <!-- History Tab -->
+        <div id="history-tab" class="tab-content">
+            <!-- [Kode history tab sebelumnya] -->
+        </div>
+
+        <!-- Report Tab -->
+        <div id="report-tab" class="tab-content">
+            <!-- [Kode report tab sebelumnya] -->
+        </div>
+
+        <footer class="main-footer">
+            <p>&copy; 2024 Khaerul Ananda - FinanceAnalytics Pro</p>
+            <div class="footer-links">
+                <span>Version 2.0</span>
+                <span id="lastUpdate">Last update: -</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-chart-line fa-spin"></i>
+            <p>Memuat Dashboard...</p>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <script src="database.js"></script>
+    <script src="dashboard.js"></script>
+</body>
+</html>
